@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Sparkles, Download, RefreshCw, AlertCircle } from 'lucide-react';
 
-// 1. Setup API
+// 1. Setup API - Hardcoded for stability
 const API_KEY = "AIzaSyCduxqf7gbGzLZgLSHcHiJSjRymNsrHrFw";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
@@ -19,8 +19,9 @@ const TextureApp = () => {
     setError(null);
 
     try {
+      // Fixed the model name to include the "models/" prefix
       const textModel = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
+        model: "models/gemini-1.5-flash",
         safetySettings: [
           { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
           { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -37,6 +38,7 @@ const TextureApp = () => {
       const optimizedPrompt = response.text() || "seamless texture " + prompt;
 
       const encodedPrompt = encodeURIComponent(optimizedPrompt.substring(0, 500));
+      // Using Pollinations for the actual image generation
       const generatedUrl = `https://pollinations.ai/p/${encodedPrompt}?width=1024&height=1024&seed=${Math.floor(Math.random() * 1000)}&model=flux&nologo=true`;
       
       setImage(generatedUrl);
@@ -47,18 +49,18 @@ const TextureApp = () => {
     } finally {
       setLoading(false);
     }
-  }; // <--- THIS WAS THE MISSING CLOSING PIECE!
+  };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center p-8 font-sans">
-      <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-8">
+      <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-8 text-center">
         Texture Generator
       </h1>
 
       <div className="w-full max-w-md space-y-4">
         <textarea
           className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-          placeholder="Describe your texture (e.g., 'Blue marble with gold veins')"
+          placeholder="Describe your texture (e.g., 'rusty metal')"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           rows={4}
@@ -74,9 +76,9 @@ const TextureApp = () => {
         </button>
 
         {error && (
-          <div className="bg-red-900/20 border border-red-500 text-red-200 p-4 rounded-xl flex items-center gap-2">
-            <AlertCircle size={20} />
-            {error}
+          <div className="bg-red-900/20 border border-red-500 text-red-200 p-4 rounded-xl flex items-center gap-2 text-xs">
+            <AlertCircle size={16} />
+            <span className="break-all">{error}</span>
           </div>
         )}
 
