@@ -40,15 +40,14 @@ const TextureApp = () => {
       const generatedUrl = `https://pollinations.ai/p/${encodedPrompt}?width=1024&height=1024&seed=${Math.floor(Math.random() * 1000)}&model=flux&nologo=true`;
       
       setImage(generatedUrl);
-        } catch (err) {
-      // This will show the ACTUAL error from Google on your screen
+    } catch (err) {
       const errorMessage = err.message || "Unknown Error";
       setError(`AI Error: ${errorMessage}`);
       console.error("DETAILED ERROR:", err);
     } finally {
       setLoading(false);
     }
-
+  }; // <--- THIS WAS THE MISSING CLOSING PIECE!
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center p-8 font-sans">
