@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Sparkles, Download, RefreshCw, AlertCircle } from 'lucide-react';
 
 // 1. Setup API (Using the Vercel variable we set up)
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const API_KEY = const API_KEY = "AIzaSyCduxqf7gbGzLZgLSHcHiJSjRymNsrHrFw";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 const TextureApp = () => {
