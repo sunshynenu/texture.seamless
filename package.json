@@ -1,1 +1,1 @@
-{"name":"texture-seamless","private":true,"version":"0.1.0","type":"module","scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},"devDependencies":{"@vitejs/plugin-react":"^4.3.1","vite":"^6.4.1"}}
+{"name":"texture-seamless","private":true,"version":"0.1.0","type":"module","scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},"devDependencies":{"@vitejs/plugin-react":"
