@@ -1,11 +1,17 @@
 {
-  "name": "seamless-texture-generator",
+  "name": "texture-seamless",
+  "name": "texture-seamless",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@google/genai": "^1.42.0",
+    "lucide-react": "^0.475.0",
     "preview": "vite preview",
     "lint": "eslint ."
   },
@@ -17,6 +23,8 @@
     "tailwindcss": "^4.0.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
+    "vite": "^6.0.0"
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.0",
