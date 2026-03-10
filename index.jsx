@@ -20,27 +20,35 @@ const TextureApp = () => {
 
     try {
       // NOTE: We use Gemini to "enhance" your prompt for better textures
-      const textModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const promptResult = await textModel.generateContent(
-        `Describe a seamless, high-resolution tileable texture for: ${prompt}. 
-         Provide only the descriptive prompt for an image generator.`
-      );
-      const optimizedPrompt = promptResult.response.text();
+      const textModel = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        // This line tells Google to be less strict for art prompts
+        safetySettings: [
+          { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+          { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+          { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+          { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+        ]
+      });
 
-      // IMPORTANT: To show an image, we usually fetch from an image API.
-      // Since Gemini 1.5 is text-only, we use a placeholder generator 
-      // that uses your AI-optimized prompt to fetch a matching texture.
-      const encodedPrompt = encodeURIComponent(optimizedPrompt);
-      const generatedUrl = `https://pollinations.ai/p/${encodedPrompt}?width=1024&height=1024&seed=${Math.floor(Math.random() * 1000)}&model=flux`;
+      const promptResult = await textModel.generateContent(
+        `Technical Artist Prompt: Create a highly detailed visual description for a tileable, seamless 3D texture: ${prompt}. Only output the description, no conversational text.`
+      );
+      
+      // Safety check: Make sure Google actually gave us text back
+      const response = await promptResult.response;
+      const optimizedPrompt = response.text() || "seamless texture " + prompt;
+
+      const encodedPrompt = encodeURIComponent(optimizedPrompt.substring(0, 500));
+      const generatedUrl = `https://pollinations.ai/p/${encodedPrompt}?width=1024&height=1024&seed=${Math.floor(Math.random() * 1000)}&model=flux&nologo=true`;
       
       setImage(generatedUrl);
     } catch (err) {
-      setError("Failed to reach AI. Check your API Key in Vercel settings.");
-      console.error(err);
-    } finally {
-      setLoading(false);
+      // This will now tell us the SPECIFIC error in the console
+      setError("AI Connection Error. Try a simpler prompt like 'Red brick'.");
+      console.error("DETAILED ERROR:", err);
     }
-  };
+
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center p-8 font-sans">
