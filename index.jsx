@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Sparkles, Download, RefreshCw, AlertCircle } from 'lucide-react';
 
-// 1. Setup API (Using the Vercel variable we set up)
+// 1. Setup API
 const API_KEY = "AIzaSyCduxqf7gbGzLZgLSHcHiJSjRymNsrHrFw";
-const genAI = new GoogleGenerativeAI("AIzaSyCduxqf7gbGzLZgLSHcHiJSjRymNsrHrFw");;
+const genAI = new GoogleGenerativeAI(API_KEY);
 
 const TextureApp = () => {
   const [prompt, setPrompt] = useState('');
@@ -19,10 +19,8 @@ const TextureApp = () => {
     setError(null);
 
     try {
-      // NOTE: We use Gemini to "enhance" your prompt for better textures
       const textModel = genAI.getGenerativeModel({ 
         model: "gemini-1.5-flash",
-        // This line tells Google to be less strict for art prompts
         safetySettings: [
           { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
           { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -35,7 +33,6 @@ const TextureApp = () => {
         `Technical Artist Prompt: Create a highly detailed visual description for a tileable, seamless 3D texture: ${prompt}. Only output the description, no conversational text.`
       );
       
-      // Safety check: Make sure Google actually gave us text back
       const response = await promptResult.response;
       const optimizedPrompt = response.text() || "seamless texture " + prompt;
 
@@ -44,11 +41,12 @@ const TextureApp = () => {
       
       setImage(generatedUrl);
     } catch (err) {
-      // This will now tell us the SPECIFIC error in the console
       setError("AI Connection Error. Try a simpler prompt like 'Red brick'.");
       console.error("DETAILED ERROR:", err);
+    } finally {
+      setLoading(false);
     }
-
+  };
 
   return (
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col items-center p-8 font-sans">
@@ -87,7 +85,8 @@ const TextureApp = () => {
               <img src={image} alt="Generated texture" className="w-full h-full object-cover" />
               <a 
                 href={image} 
-                download="texture.png"
+                target="_blank"
+                rel="noreferrer"
                 className="absolute bottom-4 right-4 bg-black/50 p-2 rounded-full hover:bg-black/80 transition-colors"
               >
                 <Download size={24} />
