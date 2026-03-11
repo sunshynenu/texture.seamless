@@ -22,7 +22,7 @@ const TextureApp = () => {
     setError(null);
 
     try {
-      // Using Gemini 2.0 Flash to generate seamless image directly
+      // Using Gemini 2.5 Flash to generate seamless image directly
       const model = genAI.getGenerativeModel({ 
         model: "models/gemini-2.5-flash",
         safetySettings: [
