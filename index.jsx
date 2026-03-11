@@ -24,7 +24,7 @@ const TextureApp = () => {
     try {
       // Using Gemini 2.0 Flash to generate seamless image directly
       const model = genAI.getGenerativeModel({ 
-        model: "models/gemini-2.0-flash",
+        model: "models/gemini-2.5-flash",
         safetySettings: [
           { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
           { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
@@ -81,7 +81,7 @@ const TextureApp = () => {
           className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg transition-transform active:scale-95 disabled:opacity-50"
         >
           {loading ? <RefreshCw className="animate-spin" /> : <Sparkles />}
-          {loading ? "SYNTHESIZING..." : "RUN SYNTHESIS"}
+          {loading ? "generating..." : "Run it!"}
         </button>
 
         {error && (
